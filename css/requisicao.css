@@ -1,0 +1,95 @@
+/* =============================================================================
+   requisicao.css: só a página do formulário (requisicao.html). Cores, botões,
+   cabeçalho e a lista "Minhas requisições" vêm do app.css, igual ao painel.
+
+   Ideia da página: pouco na tela de cada vez. Uma coluna estreita, quatro
+   etapas numeradas em cima, um cartão por etapa e a navegação embaixo.
+   ============================================================================= */
+.rq-pagina { max-width: 820px; display: grid; gap: 14px; }
+.rq-pagina.rq-larga { max-width: none; }
+.rq-persona { margin: 0; padding-bottom: 12px; font-size: 12.5px; color: var(--tx2); }
+
+/* ---------- as quatro etapas ---------- */
+.rq-passos { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+.rq-passo { width: 100%; display: flex; align-items: center; gap: 8px; padding: 9px 4px 2px; border: 0; border-top: 3px solid var(--borda); background: none; text-align: left; font-size: 13px; color: var(--tx3); }
+.rq-passo-n { width: 22px; height: 22px; flex: none; display: grid; place-items: center; border-radius: 50%; border: 1px solid var(--borda2); background: var(--sup); font: 500 11.5px "IBM Plex Mono", monospace; }
+.rq-passo-txt { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rq-passo.atual { border-top-color: var(--acc); color: var(--tx); font-weight: 600; }
+.rq-passo.atual .rq-passo-n { border-color: var(--acc); color: var(--acc); }
+.rq-passo.feita { border-top-color: var(--acc); color: var(--tx2); }
+.rq-passo.feita .rq-passo-n { background: var(--acc); border-color: var(--acc); color: transparent; position: relative; }
+.rq-passo.feita .rq-passo-n::after { content: "✓"; position: absolute; inset: 0; display: grid; place-items: center; color: #fff; font: 700 12px "IBM Plex Sans", sans-serif; }
+:root[data-theme="dark"] .rq-passo.feita .rq-passo-n::after { color: #0A1120; }
+.rq-passo.travada { cursor: default; opacity: .55; }
+
+/* ---------- o cartão da etapa ---------- */
+.rq-cartao { padding: 22px 24px; }
+.rq-cab h2 { margin: 2px 0 0; font-size: 20px; letter-spacing: -.01em; }
+.rq-cab p { margin: 2px 0 0; font-size: 13.5px; color: var(--tx2); }
+.rq-campo { display: grid; gap: 6px; padding-top: 18px; min-width: 0; }
+.rq-rot { font-size: 14px; font-weight: 600; }
+.rq-ajuda { margin: 0; font-size: 12.5px; color: var(--tx3); }
+.rq-rot + .rq-ajuda { margin-top: -3px; }
+.rq-ajuda.en-falta { color: var(--warn); font-weight: 600; }
+.rq-en { margin: 0; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 8px; font-size: 13px; color: var(--tx2); }
+.rq-en b { color: var(--tx); }
+.rq-en small { font-size: 12px; color: var(--tx3); }
+.rq-linha { display: flex; flex-wrap: wrap; gap: 8px; }
+.rq-linha > select { flex: 1 1 200px; width: auto; }
+.rq-modelo-link { margin-top: 14px; }
+.rq-modelo { display: grid; gap: 6px; margin-top: 14px; padding: 12px 14px; border: 1px solid var(--borda); border-radius: 12px; background: var(--sup2); }
+.rq-ferramenta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin-top: 16px; padding: 12px 14px; border-radius: 12px; background: var(--acc-suave); }
+.rq-ferramenta .rq-ajuda { flex: 1 1 240px; color: var(--tx2); }
+.rq-lista { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.rq-lista li { display: flex; align-items: center; gap: 8px; }
+.rq-lista li input { flex: 1; }
+.rq-num { width: 24px; height: 24px; flex: none; display: grid; place-items: center; border-radius: 7px; border: 1px solid var(--borda); background: var(--sup2); font: 500 11.5px "IBM Plex Mono", monospace; color: var(--tx3); }
+.rq-linha-pe { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; }
+.rq-desc-auto { display: grid; gap: 8px; justify-items: start; padding: 12px 14px; border: 1px dashed var(--borda2); border-radius: 12px; background: var(--sup2); }
+.rq-desc-auto p { margin: 0; font-size: 13.5px; line-height: 1.55; }
+.rq-fixo { margin: 0; padding: 10px 12px; border: 1px solid var(--borda); border-radius: 10px; background: var(--sup2); font-size: 13px; color: var(--tx2); }
+.rq-check { display: flex; align-items: center; gap: 10px; font-size: 13.5px; cursor: pointer; }
+.rq-check input { width: 18px; height: 18px; flex: none; margin: 0; accent-color: var(--acc); }
+.x-item { width: 34px; height: 34px; flex: none; border: 1px solid var(--borda); border-radius: 9px; background: var(--sup2); color: var(--tx3); }
+.x-item:hover:not(:disabled) { color: var(--bad); border-color: var(--bad); }
+.x-item:disabled { opacity: .35; }
+.contador { font: 11.5px "IBM Plex Mono", monospace; color: var(--tx3); }
+.comps { display: flex; flex-wrap: wrap; gap: 6px; }
+.comp { border: 1px solid var(--borda2); background: var(--sup); border-radius: var(--pilula); padding: 7px 13px; font-size: 12.5px; color: var(--tx); }
+.comp.ativo { background: var(--acc); border-color: var(--acc); color: #fff; font-weight: 600; }
+:root[data-theme="dark"] .comp.ativo { color: #0A1120; }
+.comp:disabled { opacity: .4; }
+
+/* "Mais requisitos": fechado, porque quase nenhum cargo muda estes padrões */
+.rq-mais { margin-top: 18px; border: 1px solid var(--borda); border-radius: 12px; background: var(--sup2); }
+.rq-mais > summary { cursor: pointer; padding: 12px 14px; font-size: 13.5px; font-weight: 600; }
+.rq-mais-corpo { padding: 0 14px 14px; }
+.rq-mais-corpo > .rq-campo:first-child { padding-top: 4px; }
+/* o que vai sair no documento, ao vivo */
+.rq-saida { display: grid; gap: 6px; margin-top: 18px; padding: 12px 14px; border: 1px solid var(--acc-linha); border-radius: 12px; background: var(--acc-suave); }
+.rq-saida .doc-chk { margin: 0; }
+
+/* ---------- etapa 4: prévia e termo ---------- */
+.rq-ajuda-doc { margin-top: 14px; }
+.rq-previa { margin-top: 10px; max-height: 560px; overflow: auto; padding: 12px; border: 1px solid var(--borda); border-radius: 12px; background: var(--fundo); }
+.rq-termo { display: grid; gap: 8px; margin-top: 18px; }
+.rq-termo ul { margin: 0; padding: 0 0 0 18px; display: grid; gap: 6px; font-size: 13px; color: var(--tx2); }
+.rq-termo li b { color: var(--tx); }
+.rq-termo-ok { margin-top: 4px; padding: 12px 14px; border: 1px solid var(--acc); border-radius: 12px; background: var(--acc-suave); font-weight: 600; }
+
+/* ---------- navegação e confirmação ---------- */
+.rq-nav { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; }
+.rq-falta { flex: 1 1 200px; text-align: center; font-size: 12.5px; color: var(--tx2); }
+.confirmacao { max-width: 640px; margin: 0 auto; padding: 34px 28px; text-align: center; }
+.conf-icone { width: 54px; height: 54px; margin: 0 auto 10px; display: grid; place-items: center; border-radius: 50%; background: var(--ok-s); color: var(--ok); font-size: 26px; font-weight: 700; }
+.confirmacao h2 { margin: 0 0 8px; font-size: 21px; }
+.conf-txt { color: var(--tx2); }
+.conf-acoes { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 16px; }
+
+@media (max-width: 560px) {
+  .rq-cartao { padding: 18px 16px; }
+  .rq-passo { flex-direction: column; align-items: flex-start; gap: 4px; font-size: 11.5px; }
+  .rq-passo-txt { white-space: normal; overflow: visible; }
+  .rq-nav .rq-falta { order: 3; flex-basis: 100%; }
+  .confirmacao { padding: 26px 18px; }
+}

@@ -1,0 +1,129 @@
+/* =============================================================================
+   documento.css: a FOLHA do documento do cargo e a janela que a mostra.
+
+   A mesma folha aparece em três lugares (ficha, prévia do formulário e
+   aprovação), então o desenho mora aqui, separado do resto.
+   Na impressão (Imprimir / PDF) sai só a folha, sempre em fundo branco,
+   com as linhas de assinatura que na tela ficam escondidas.
+   ============================================================================= */
+/* A janela tem altura fixa e rola POR DENTRO (o corpo); a página de trás fica travada. */
+.doc-modal { position: fixed; inset: 0; z-index: 100; display: flex; justify-content: center; align-items: center; padding: 24px 20px; overscroll-behavior: contain; }
+.doc-fundo { position: fixed; inset: 0; background: rgba(6, 12, 24, .5); backdrop-filter: blur(2px); }
+.doc-janela { position: relative; width: min(1120px, 100%); background: var(--fundo); border: 1px solid var(--borda2); border-radius: 18px; box-shadow: 0 28px 80px rgba(0, 0, 0, .35); animation: doc-entra .2s ease-out; }
+.doc-janela { display: flex; flex-direction: column; max-height: calc(100vh - 48px); overflow: hidden; }
+@keyframes doc-entra { from { transform: translateY(14px); opacity: 0; } }
+.doc-barra { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; padding: 14px 18px; border-bottom: 1px solid var(--borda); }
+.doc-barra .eyebrow { text-transform: uppercase; }
+.doc-acoes { display: flex; align-items: center; gap: 8px; }
+.doc-corpo { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 18px; padding: 18px; align-items: start; flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-gutter: stable; scrollbar-width: auto; scrollbar-color: var(--borda2) transparent; }
+.doc-corpo:focus { outline: none; }
+.doc-corpo:focus-visible { box-shadow: inset 0 0 0 2px var(--acc-linha); }
+.doc-corpo::-webkit-scrollbar { width: 12px; }
+.doc-corpo::-webkit-scrollbar-thumb { background: var(--borda2); border-radius: 8px; border: 3px solid var(--fundo); }
+/* Tem mais embaixo: a borda de baixo esmaece e um aviso pequeno some quando chega ao fim. */
+.doc-mais { position: absolute; left: 1px; right: 13px; bottom: 1px; height: 64px; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 10px; pointer-events: none; border-radius: 0 0 18px 18px; background: linear-gradient(to bottom, transparent, var(--fundo) 85%); opacity: 0; transition: opacity .2s; }
+.doc-modal.tem-mais .doc-mais { opacity: 1; }
+.doc-mais span { font-size: 12px; font-weight: 600; color: var(--tx2); background: var(--sup); border: 1px solid var(--borda2); border-radius: 999px; padding: 4px 12px; box-shadow: var(--sombra); }
+body.doc-aberto, html.trava-rolagem, html.trava-rolagem body { overflow: hidden; }
+
+/* ---------- a folha ---------- */
+.doc-folha { background: var(--sup); border: 1px solid var(--borda); border-radius: 14px; padding: 26px 30px; box-shadow: var(--sombra); min-width: 0; color: var(--tx); }
+.doc-cab { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding-bottom: 14px; border-bottom: 2px solid var(--tx); }
+.doc-marca { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 13px; line-height: 1.2; }
+.doc-marca small { font-weight: 500; color: var(--tx2); font-size: 11.5px; letter-spacing: .04em; }
+.doc-logo { width: 32px; height: 32px; border-radius: 9px; display: grid; place-items: center; background: var(--escuro); color: var(--escuro-num); flex: none; }
+.doc-logo svg { width: 22px; height: 22px; }
+.doc-cod { font-size: 12px; color: var(--tx2); border: 1px solid var(--borda2); border-radius: 8px; padding: 4px 9px; white-space: nowrap; }
+.doc-titulo { padding: 16px 0 6px; }
+.doc-nome { margin: 0; font-size: 24px; line-height: 1.2; letter-spacing: -.01em; }
+.doc-en { margin-top: 2px; font-size: 14px; color: var(--tx2); }
+.doc-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.doc-campos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-auto-flow: row dense; gap: 1px; margin: 14px 0 6px; background: var(--borda); border: 1px solid var(--borda); border-radius: 12px; overflow: hidden; }
+.doc-campo { padding: 10px 14px; background: var(--sup); min-width: 0; margin: 0; }
+.doc-campo dt { font: 500 10px "IBM Plex Mono", monospace; letter-spacing: .12em; text-transform: uppercase; color: var(--tx3); }
+.doc-campo dd { margin: 3px 0 0; font-size: 13.5px; display: flex; flex-direction: column; gap: 2px; align-items: flex-start; }
+.doc-campo dd small { color: var(--tx3); font-size: 11px; }
+.doc-campo.largo { grid-column: span 2; }
+.doc-campo.inteiro { grid-column: 1 / -1; }
+.doc-rh { color: var(--tx3); font-style: italic; }
+.doc-falta { color: var(--warn); font-style: italic; }
+.doc-link { border: 0; background: none; padding: 0; color: var(--acc); font-weight: 600; text-align: left; }
+.doc-link:hover { text-decoration: underline; }
+.doc-campo dd .doc-sep { display: none; }
+.doc-nota-idioma { margin: 8px 0 0; font-size: 12px; color: var(--tx3); font-style: italic; }
+.doc-sec { margin-top: 18px; }
+.doc-sec h3 { margin: 0 0 8px; font-size: 11.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--acc); font-weight: 700; }
+.doc-sec p { margin: 0; line-height: 1.6; }
+.doc-lista { margin: 0; padding-left: 22px; display: grid; gap: 5px; line-height: 1.5; }
+.doc-lista li::marker { font-family: "IBM Plex Mono", monospace; color: var(--tx3); font-size: 12px; }
+.doc-chk { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.doc-chk li { position: relative; padding-left: 26px; line-height: 1.5; }
+.doc-chk li::before { content: "✓"; position: absolute; left: 0; top: 1px; width: 18px; height: 18px; border-radius: 50%; display: grid; place-items: center; font-size: 11px; font-weight: 700; background: var(--ok-s); color: var(--ok); }
+.doc-comp { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 16px; margin: 0; }
+.doc-comp div { padding: 8px 12px; border-radius: 10px; background: var(--sup2); border: 1px solid var(--borda); }
+.doc-comp dt { font-weight: 600; font-size: 13px; }
+.doc-comp dd { margin: 2px 0 0; font-size: 12.5px; color: var(--tx2); }
+.doc-pe { margin-top: 22px; padding-top: 12px; border-top: 1px solid var(--borda); }
+.doc-pe p { margin: 0; font-size: 11.5px; color: var(--tx3); }
+/* Assinaturas fictícias: a rubrica numa fonte cursiva, sobre a linha. */
+.doc-ass { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; margin: 8px 0 18px; }
+.doc-ass-item { display: flex; flex-direction: column; gap: 3px; min-width: 0; font-size: 11.5px; color: var(--tx2); }
+.doc-ass-item b { color: var(--tx); font-size: 12px; }
+.doc-rubrica { display: block; height: 34px; padding: 0 6px; font: 400 27px/34px "Caveat", "Segoe Script", "Brush Script MT", cursive; color: #1B3A8A; transform: rotate(-4deg); transform-origin: left bottom; white-space: nowrap; overflow: hidden; }
+:root[data-theme="dark"] .doc-rubrica { color: #A9C1FF; }
+.doc-ass-linha { display: block; border-bottom: 1px solid var(--tx2); margin-bottom: 4px; }
+@media (max-width: 560px) { .doc-ass { grid-template-columns: minmax(0, 1fr); gap: 14px; } }
+
+/* ---------- a coluna do lado (só na tela) ---------- */
+.doc-lado { display: grid; gap: 14px; min-width: 0; }
+.lado-bloco { background: var(--sup); border: 1px solid var(--borda); border-radius: 14px; padding: 14px 16px; display: grid; gap: 8px; min-width: 0; }
+.lado-bloco h3 { margin: 0 0 2px; font-size: 11.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--tx2); font-weight: 600; }
+.lado-bloco .botao { justify-self: start; }
+.lado-linha { display: flex; justify-content: space-between; gap: 10px; font-size: 13px; padding: 4px 0; border-bottom: 1px dashed var(--borda); }
+.lado-linha span { color: var(--tx2); }
+.lado-vazio { margin: 0; font-size: 12.5px; color: var(--tx3); }
+.parecidos { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.parecido { width: 100%; display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 8px; text-align: left; padding: 8px 10px; border: 1px solid var(--borda); border-radius: 10px; background: var(--sup2); color: var(--tx); }
+.parecido:hover { border-color: var(--acc); }
+.parecido .mono { grid-row: span 2; font-size: 11px; color: var(--tx3); padding-top: 2px; }
+.parecido b { font-size: 13px; }
+.parecido small { font-size: 11.5px; color: var(--tx2); }
+
+@media (max-width: 980px) {
+  .doc-corpo { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 640px) {
+  .doc-modal { padding: 0; }
+  .doc-janela { border-radius: 0; min-height: 100%; border: 0; }
+  .doc-corpo { padding: 12px; }
+  .doc-folha { padding: 18px 16px; }
+  .doc-campos { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .doc-campo.largo { grid-column: 1 / -1; }
+  .doc-comp { grid-template-columns: minmax(0, 1fr); }
+  .doc-nome { font-size: 20px; }
+  .doc-cab { flex-wrap: wrap; }
+}
+
+/* ---------- impressão: só a folha, em papel branco ---------- */
+@media print {
+  @page { margin: 14mm; }
+  :root, :root[data-theme="dark"] {
+    --fundo: #fff; --sup: #fff; --sup2: #F5F7FA; --borda: #D9E0E9; --borda2: #C3CCD8; --tx: #0F1C33; --tx2: #42506A; --tx3: #5B6880;
+    --acc: #A8341A; --acc-suave: rgba(200, 64, 31, .09); --ok: #1D7A4F; --ok-s: rgba(29, 122, 79, .12); --warn: #8A4D00;
+    --dado: #1F3A68; --dado-suave: rgba(31, 58, 104, .11); --escuro: #0F1C33; --escuro-num: #FF9F87; color-scheme: light;
+  }
+  body { background: #fff !important; }
+  body.doc-aberto > *:not(.doc-modal) { display: none !important; }
+  html.trava-rolagem, html.trava-rolagem body, body.doc-aberto { overflow: visible !important; }
+  .doc-modal { position: static !important; display: block !important; padding: 0 !important; overflow: visible !important; }
+  .doc-mais { display: none !important; }
+  .doc-rubrica { color: #1B3A8A !important; }
+  .doc-fundo, .doc-barra, .doc-lado { display: none !important; }
+  .doc-janela { position: static; width: auto; max-height: none; overflow: visible; border: 0; border-radius: 0; box-shadow: none; background: #fff; animation: none; }
+  .doc-corpo { display: block; padding: 0; overflow: visible; }
+  .doc-folha { border: 0; border-radius: 0; box-shadow: none; padding: 0; }
+  .doc-ass { display: grid !important; }
+  .doc-link { color: var(--tx) !important; }
+  .doc-sec, .doc-campos, .doc-comp div { break-inside: avoid; }
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
